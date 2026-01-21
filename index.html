@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            body.site-body {
+                background-color: #333;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 2rem;
+                color: #f0f0f0;
+            }
+            h1.site-title { text-align: center; color: #ffffff; }
+            p.intro { text-align: center; color: #cccccc; font-size: 1.1rem; }
+            figure { display: inline-block; margin: 10px; text-align: center; }
+            figcaption { font-size: 0.9rem; color: #aaaaaa; }
+            h2, h3 { color: #ffffff; }
+            ul { color: #cccccc; }
+        </style>
+    </head>
+    <body class="site-body">
+        <h1 class="site-title">welcome to my first website</h1>
+
+        <div class="controls" style="text-align:center; margin-top:1.25rem;">
+            <button onclick="showAlert()">Show alert</button>
+            <button onclick="changeBackground()">Change background</button>
+            <button onclick="toggleMessage()">Toggle message</button>
+        </div>
+
+        <h2>Snowmobile Safari</h2>
+        <p>Experience the thrill of riding snowmobiles through pristine winter landscapes. Join our guided safaris for an unforgettable adventure in the snow!</p>
+
+        <h3>Pricing</h3>
+        <ul>
+            <li>Half-day safari: $150 per person</li>
+            <li>Full-day safari: $250 per person</li>
+            <li>Group discounts available for parties of 5 or more</li>
+        </ul>
+
+        <h3>Schedule</h3>
+        <p>Our snowmobile safaris run every weekend during the winter season.</p>
+        <ul>
+            <li>Saturdays: Departures at 9:00 AM and 2:00 PM</li>
+            <li>Sundays: Departures at 10:00 AM and 3:00 PM</li>
+            <li>Advance booking required. Check weather conditions before departure.</li>
+        </ul>
+
+        <h3>Our Snowmobile Services</h3>
+        <div class="services">
+            <figure>
+                <img src="https://images.pexels.com/photos/31391766/pexels-photo-31391766.jpeg?auto=compress&cs=tinysrgb&w=400&fit=max" alt="Guided Snowmobile Tours" width="300">
+                <figcaption>Guided Tours: Explore the wilderness with expert guides.</figcaption>
+            </figure>
+            <figure>
+                <img src="https://images.pexels.com/photos/12138608/pexels-photo-12138608.jpeg?auto=compress&cs=tinysrgb&w=400&fit=max" alt="Snowmobile Rental" width="300">
+                <figcaption>Rental Services: High-quality snowmobiles for all skill levels.</figcaption>
+            </figure>
+            <figure>
+                <img src="https://images.pexels.com/photos/5927222/pexels-photo-5927222.jpeg?auto=compress&cs=tinysrgb&w=400&fit=max" alt="Safety Training" width="300">
+                <figcaption>Safety Training: Learn safe riding techniques before your adventure.</figcaption>
+            </figure>
+        </div>
+
+        <div id="message" style="display:none; text-align:center; margin-top:1rem;">
+            <strong>Dette er en skjult melding — bytt farge</strong>
+        </div>
+
+        <!-- Chatbot Toggle Button -->
+        <button id="chat-toggle" onclick="toggleChat()" style="position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; border: 2px solid #ffffff; padding: 12px 18px; border-radius: 50%; cursor: pointer; font-size: 20px; box-shadow: 0 0 15px rgba(0,123,255,0.6); transition: all 0.3s ease;">💬</button>
+
+        <!-- Chatbot Popup -->
+        <div id="chatbot" style="display: none; position: fixed; bottom: 80px; right: 20px; width: 300px; height: 400px; background-color: #333; color: white; border: 1px solid #555; border-radius: 10px; padding: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 1000;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <strong>Chat with us</strong>
+                <button onclick="toggleChat()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
+            </div>
+            <div id="chat-messages" style="height: 250px; overflow-y: auto; margin-bottom: 10px; background-color: #222; padding: 5px; border-radius: 5px;"></div>
+            <div style="display: flex;">
+                <input type="text" id="chat-input" placeholder="Ask about our services..." style="flex: 1; padding: 5px; border: none; border-radius: 5px;" onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button onclick="sendMessage()" style="background-color: #555; color: white; border: none; padding: 5px 10px; margin-left: 5px; border-radius: 5px; cursor: pointer;">Send</button>
+            </div>
+        </div>
+
+        <script>
+            function showAlert() {
+                alert('Hei! velkommen til mitt prosjekt.');
+            }
+
+            let colorIndex = 0;
+            const colors = ['white'];
+            function changeBackground() {
+                document.body.style.backgroundColor = colors[colorIndex];
+                colorIndex = (colorIndex + 1) % colors.length;
+            }
+
+            function toggleMessage() {
+                const msg = document.getElementById('message');
+                msg.style.display = (msg.style.display === 'none' || msg.style.display === '') ? 'block' : 'none';
+            }
+
+            function toggleChat() {
+                const chat = document.getElementById('chatbot');
+                chat.style.display = (chat.style.display === 'none') ? 'block' : 'none';
+            }
+
+            function sendMessage() {
+                const input = document.getElementById('chat-input');
+                const messages = document.getElementById('chat-messages');
+                const userMessage = input.value.trim();
+                if (userMessage === '') return;
+
+                // Add user message
+                messages.innerHTML += '<p><strong>You:</strong> ' + userMessage + '</p>';
+                input.value = '';
+
+                // Generate response
+                const response = getResponse(userMessage);
+                messages.innerHTML += '<p><strong>Bot:</strong> ' + response + '</p>';
+
+                // Scroll to bottom
+                messages.scrollTop = messages.scrollHeight;
+            }
+
+            function getResponse(message) {
+                const lowerMessage = message.toLowerCase();
+                if (lowerMessage.includes('price') || lowerMessage.includes('pricing') || lowerMessage.includes('cost')) {
+                    return 'Half-day safari: $150 per person. Full-day safari: $250 per person. Group discounts available for parties of 5 or more.';
+                } else if (lowerMessage.includes('tour') || lowerMessage.includes('safari')) {
+                    return 'Experience guided snowmobile safaris through pristine winter landscapes. We offer half-day and full-day tours.';
+                } else if (lowerMessage.includes('rental')) {
+                    return 'We provide high-quality snowmobile rentals for all skill levels.';
+                } else if (lowerMessage.includes('safety') || lowerMessage.includes('training')) {
+                    return 'We offer safety training to learn safe riding techniques before your adventure.';
+                } else if (lowerMessage.includes('schedule') || lowerMessage.includes('time') || lowerMessage.includes('weekend') || lowerMessage.includes('when')) {
+                    return 'Our safaris run every weekend. Saturdays at 9:00 AM and 2:00 PM, Sundays at 10:00 AM and 3:00 PM. Advance booking required.';
+                } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                    return 'Hello! How can I help you with our snowmobile services?';
+                } else {
+                    return 'I\'m here to answer questions about our snowmobile safari services. Ask about pricing, tours, rentals, safety, or schedule!';
+                }
+            }
+        </script>
+    </body>
+</html>
